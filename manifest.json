@@ -9,8 +9,18 @@
         "default_icon": "icon.png",
         "default_popup": "popup.html"
     },
+    "content_scripts": [
+        {
+            "matches": ["https://familysearch.org/tree/person/*"],
+            "js": ["popup.js"]
+        }
+    ],
+    /*"background": {
+        "scripts": ["popup.js"],
+        "persistent": false
+    },*/
     "permissions": [
-    "activeTab",
-    "https://ajax.googleapis.com/"
+    "tabs",
+    "https://familysearch.org/tree/person/*"
   ]
 }
