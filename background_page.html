@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script>
+		/*******************************************************
+		* The purpose of this file is to provide a place for us
+		* to run script in the background.  Primarily, it's
+		* purpose is to run the OAuth processes.
+		*******************************************************/
+
+		// TASK: Authenticate the user
+		function authenticateUser() {
+			var authenticationSuccess = function() {console.log('Authentication Success')};
+			var authenticationFailure = function() {console.log('Authentication Failure')};
+
+			// Insert the App Key
+			Trello.setKey('83aa6ecc472eb7e1761b6b649cca40fb');
+			Trello.authorize({
+				type: 'popup',
+				name: 'FamilySearch Add Trello Card',
+				scope: {
+					read: 'true',
+					write: 'true'
+				},
+				persist: 'true',
+		    //interactive: 'false',
+				expiration: 'never',
+				success: authenticationSuccess,
+				error: authenticationFailure
+			});
+
+			//console.log(Trello.token());
+		}
+
+		authenticateUser();
+
+		</script>
+	</head>
+</html>
