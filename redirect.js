@@ -1,5 +1,19 @@
+/*
+window.onload = function () {
+    var parts = window.location.href.split("#token=");
+    window.localStorage.setItem("trellochrome_token", parts[1]);
+
+    console.log(parts[1]);
+};
+*/
+
+// Authorize Trello
 var authenticationSuccess = function () {
     console.log('Authentication Success!')
+
+    var token = Trello.token();
+    window.localStorage.setItem('trelloToken', token);
+    console.log('token: ' + token);
 
     var idList = '58f533ae840e741be1d1fb01';
     var creationSuccess = function (data) {
@@ -27,13 +41,13 @@ var authenticationFailure = function () {
 Trello.setKey('83aa6ecc472eb7e1761b6b649cca40fb');
 
 Trello.authorize({
-    type: 'popup',
+    type: 'redirect',
     name: 'Getting Started Application',
     scope: {
         read: 'true',
         write: 'true'
     },
-    interactive: 'false',
+    interactive: 'true',
     expiration: 'never',
     success: authenticationSuccess,
     error: authenticationFailure

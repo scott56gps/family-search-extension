@@ -2,40 +2,43 @@
 <html>
 
 <head>
-  <title>Family Search Example Extension Front Page</title>
-  <style>
-    body {
-      font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
-      font-size: 100%;
-    }
-    
-    #status {
-      /* avoid an excessively wide status text */
-      white-space: pre;
-      text-overflow: ellipsis;
-      overflow: hidden;
-      max-width: 400px;
-    }
+    <title>Family Search Example Extension Front Page</title>
+    <style>
+        body {
+            font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
+            font-size: 100%;
+        }
 
-  </style>
+        #status {
+            /* avoid an excessively wide status text */
+            white-space: pre;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            max-width: 400px;
+        }
 
-  <!--
+    </style>
+
+    <!--
       - JavaScript and HTML must be in separate files: see our Content Security
       - Policy documentation[1] for details and explanation.
       -
       - [1]: https://developer.chrome.com/extensions/contentSecurityPolicy
      -->
-  <!--<script src="jquery-2.1.1.min.js"></script>
-	<script src="trello_client.js"></script>-->
-  <script src="popup.js"></script>
+    <script src="jquery-2.1.1.min.js"></script>
+    <script src="trello_client.js"></script>
+    <script src="popup.js"></script>
+    <!--<script src="trelloAuthenticateExample.js"></script>-->
+    <!--<script src="https://localhost:8000/trelloAuthenticateExample.js"></script>-->
 </head>
 
 <body>
-  <h1>Family Search Example</h1>
-  <div id="name-result">
-  </div>
-  <div id="id-result">
-  </div>
+    <h1> Family Search Example
+    </h1>
+    <div id="name-result">
+    </div>
+    <div id="id-result">
+    </div>
 </body>
 
 </html>
