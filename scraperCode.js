@@ -13,3 +13,10 @@ function scrapeNameAndId() {
 }
 
 scrapeNameAndId();
+
+// The following is prototype code to include a new element in the page that will help users
+//  immediately see if this person is already in trello or not.
+/*var personInformationElement = document.querySelector('.person-information')
+var newH1 = document.createElement('h1')
+var newContent = document.createTextNode('In Trello');
+personInformationElement.appendChild(newContent);*/

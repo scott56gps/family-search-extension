@@ -8,89 +8,112 @@
 function main() {
     // Scrape the page
     chrome.tabs.executeScript(null, {
-        file: "./scraperCode.js"
-        //code: 'console.log(document.querySelector(\'span.fs-person-vitals__name-full\').innerText)'
+        file: "scraperCode.js"
     }, function (results) {
         if (Array.isArray(results)) {
             console.log(results[0]);
-            // Send the results to our background page for processing
-
-            // document.getElementById('name-result').innerText = 'Name: ' + results[0].fullName;
-            // document.getElementById('id-result').innerText = 'ID: ' + results[0].id;
 
             // Now, let's authenticate the user
-            // EXPERIMENT START
-            var authenticationSuccess = function () {
+            var addCard = function () {
                 console.log('Authentication Success!')
 
-
+                // Here, we'll need to handle whatever request was given us
 
                 // Get all the cards in the board
-                function cardRetrievalSuccess(boardLists) {
+                function batchSuccess(boardListsAndCards) {
                     // We have the Family History Board
-                    console.log(Array.isArray(boardLists))
+                    console.log(Array.isArray(boardListsAndCards))
 
-                    var availableNamesListId;
-                    // Now, we will search the array of lists for the 'Available Names' list
-                    boardLists.forEach(function (list) {
-                        if (list.name === 'Available Names') {
-                            availableNamesListId = list.id;
+                    // FIRST, check to see if the card already exists anywhere in the board
+                    // The second element of our array contains all the cards on the board
+                    var cardExists = false;
+                    var culpritIdList;
+                    boardListsAndCards[1]['200'].forEach(function (card) {
+                        if (card.name === results[0].fullName + ' ' + results[0].id) {
+                            cardExists = true;
+                            culpritIdList = card.idList;
                         }
                     });
 
-                    Trello.get('/lists/' + availableNamesListId + '/cards', function (availableNamesCards) {
-                        var creationSuccess = function (data) {
-                            console.log('Card was created successfully.  JSON returned: ' + JSON.stringify(data));
-                        }
-
-                        var creationFailure = function (error) {
-                            console.error('There was an error in creating the card.  ERROR: ' + error);
-                        }
-
-                        // Does the card exist?
-                        var cardExists = false;
-                        availableNamesCards.forEach(function (card) {
-                            if (card.name === results[0].fullName + ' ' + results[0].id) {
-                                cardExists = true;
+                    if (!cardExists) {
+                        var availableNamesListId;
+                        // Now, we will search the array of lists for the 'Available Names' list
+                        boardListsAndCards[0]['200'].forEach(function (list) {
+                            if (list.name === 'Available Names') {
+                                availableNamesListId = list.id;
                             }
                         });
 
-                        if (!cardExists) {
-                            // This is the body of the new card we will create
-                            var newCard = {
-                                name: results[0].fullName + ' ' + results[0].id,
-                                idList: availableNamesListId,
-                                pos: 'top'
-                            };
+                        Trello.get('/lists/' + availableNamesListId + '/cards', function (availableNamesCards) {
+                                var creationSuccess = function (data) {
+                                    console.log('Card was created successfully.  JSON returned: ' + JSON.stringify(data.idList));
+                                    document.getElementById('boldHeader').innerText = results[0].fullName + ' ' + results[0].id + ' was added to Trello';
 
-                            // Now, we post the whole thing to Trello
-                            Trello.post('/cards/', newCard, creationSuccess, creationFailure);
-                            return;
-                        } else {
-                            console.log('A card already exists with this name');
-                        }
-                    }, function (error) {
-                        console.error('There was an error in retrieving the cards.  ERROR: ' + error);
-                        return;
-                    })
+                                    // Inject code to display on page
+                                    chrome.tabs.executeScript(null, {
+                                        code: 'var idList = ' + JSON.stringify(data.idList)
+                                    }, function () {
+                                        chrome.tabs.executeScript(null, {
+                                            file: 'trelloStatusCode.js'
+                                        });
+                                    })
+                                }
+
+                                var creationFailure = function (error) {
+                                    console.error('There was an error in creating the card.  ERROR: ' + error);
+                                }
+
+
+
+                                // Get the user id
+                                Trello.get('/members/me', function (memberData) {
+                                    var memberId = memberData.id;
+                                    // This is the body of the new card we will create
+                                    var newCard = {
+                                        name: results[0].fullName + ' ' + results[0].id,
+                                        idList: availableNamesListId,
+                                        idMembers: memberId,
+                                        pos: 'top'
+                                    };
+
+                                    // Now, we post the whole thing to Trello
+                                    Trello.post('/cards/', newCard, creationSuccess, creationFailure);
+                                    return;
+                                });
+                            },
+                            function (error) {
+                                console.error('There was an error in retrieving the cards.  ERROR: ' + error);
+                                return;
+                            });
+                    } else {
+                        console.log('A card already exists with this name.  JSON: ' + culpritIdList);
+                        document.getElementById('boldHeader').innerText = 'A card already exists with this name: ' + results[0].fullName + ' ' + results[0].id;
+
+                        // Inject code to display on page
+                        chrome.tabs.executeScript(null, {
+                            code: 'var idList = ' + JSON.stringify(culpritIdList)
+                        }, function () {
+                            chrome.tabs.executeScript(null, {
+                                file: 'trelloStatusCode.js'
+                            });
+                        })
+                    }
                 }
 
-                function cardRetrievalFailure(error) {
+                function batchFailure(error) {
                     console.error(error);
                     return;
                 }
 
-                Trello.get('/boards/PsS7R0Dy/lists', cardRetrievalSuccess, cardRetrievalFailure);
+                Trello.get('/batch?urls=/boards/PsS7R0Dy/lists,/boards/PsS7R0Dy/cards', batchSuccess, batchFailure);
                 return;
             }
-
             var authenticationFailure = function () {
                 console.log('Authentication Failure!')
                 return;
             }
 
             Trello.setKey('83aa6ecc472eb7e1761b6b649cca40fb');
-
             Trello.authorize({
                 type: 'redirect',
                 name: 'Getting Started Application',
@@ -100,38 +123,14 @@ function main() {
                 },
                 interactive: 'true',
                 expiration: 'never',
-                success: authenticationSuccess,
+                success: addCard,
                 error: authenticationFailure
             });
-
-            // EXPERIMENT END
         } else {
             console.log('result is not an array');
         }
-
-
-
-
-
-        //var returnUrl = chrome.extension.getURL("redirect.html");
-        /*chrome.windows.create({
-            url: "https://trello.com/1/authorize?" + "response_type=token" + "&key=83aa6ecc472eb7e1761b6b649cca40fb" + "&callback_method=fragment" + "&response_type=token" + "&return_url=" + encodeURI(returnUrl) + "&scope=read,write,account&expiration=never" + "&name=Family-History-Extension",
-            width: 520,
-            height: 620,
-            type: "panel",
-            focused: true
-        });*/
-        /*chrome.windows.create({
-            url: "redirect.html",
-            width: 520,
-            height: 620,
-            type: "panel",
-            focused: true
-        });*/
     });
 }
-
-
 
 
 document.addEventListener('DOMContentLoaded', function () {
