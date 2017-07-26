@@ -1,12 +1,11 @@
-/*
 window.onload = function () {
     var parts = window.location.href.split("#token=");
     window.localStorage.setItem("trellochrome_token", parts[1]);
 
     console.log(parts[1]);
 };
-*/
 
+/*
 // Authorize Trello
 var authenticationSuccess = function () {
     console.log('Authentication Success!')
@@ -52,3 +51,4 @@ Trello.authorize({
     success: authenticationSuccess,
     error: authenticationFailure
 });
+*/

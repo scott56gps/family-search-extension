@@ -12,6 +12,13 @@ function scrapeNameAndId() {
     };
 }
 
+// START EXPERIMENT
+function putTrelloObjectOnPage() {
+    var newScriptElement = document.createElement('script');
+    newScriptElement.setAttribute('src', 'https://api.trello.com/1/client.js?key=83aa6ecc472eb7e1761b6b649cca40fb')
+}
+// END EXPERIMENT
+
 scrapeNameAndId();
 
 // The following is prototype code to include a new element in the page that will help users
