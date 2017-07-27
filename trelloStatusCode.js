@@ -7,28 +7,36 @@ function injectStatus() {
     // Get the right div
     var personInformationElement = document.querySelector('.person-information')
     console.log(personInformationElement)
-    var newH1 = document.createElement('h1')
+    var newDiv = document.createElement('div')
 
     // Decide what message we should display
     switch (idList) {
         case availableNamesId:
-            var newContent = document.createTextNode('Trello: Available');
-            personInformationElement.appendChild(newContent);
+            if (!personInformationElement.innerHTML.includes('Trello: Available')) {
+                var newContent = document.createTextNode('Trello: Available');
+                personInformationElement.appendChild(newContent);
+            }
             break;
 
         case requestsId:
-            var newContent = document.createTextNode('Trello: Requests');
-            personInformationElement.appendChild(newContent);
+            if (!personInformationElement.innerHTML.includes('Trello: Requests')) {
+                var newContent = document.createTextNode('Trello: Requests');
+                personInformationElement.appendChild(newContent);
+            }
             break;
 
         case workingId:
-            var newContent = document.createTextNode('Trello: Working');
-            personInformationElement.appendChild(newContent);
+            if (!personInformationElement.innerHTML.includes('Trello: Working')) {
+                var newContent = document.createTextNode('Trello: Working');
+                personInformationElement.appendChild(newContent);
+            }
             break;
 
         case finishedId:
-            var newContent = document.createTextNode('Trello: Finished');
-            personInformationElement.appendChild(newContent);
+            if (!personInformationElement.innerHTML.includes('Trello: Finished')) {
+                var newContent = document.createTextNode('Trello: Finished');
+                personInformationElement.appendChild(newContent);
+            }
             break;
         default:
             break;

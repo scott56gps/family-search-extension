@@ -114,8 +114,9 @@ function main() {
             }
 
             // Check to see if the token still exists
-            console.log(Trello.token())
-            if (Trello.token()) {
+            console.log(localStorage.trelloToken)
+            if (localStorage.trelloToken) {
+                console.log('hola')
                 // Simply authorize and go ahead
                 Trello.setKey('83aa6ecc472eb7e1761b6b649cca40fb');
                 Trello.authorize({
@@ -141,10 +142,13 @@ function main() {
                     type: "panel",
                     focused: true
                 }, function (window) {
-                    console.log('HI!! ' + Trello.token());
-                    console.log(window.id);
-                    console.log(window.localStorage)
-                    chrome.windows.remove(window.id, function () {
+
+                    window.onRemoved.addListener(function (windowId) {
+                        console.log('HI!! ' + Trello.token());
+                        console.log(window.id);
+                        console.log(localStorage);
+
+
                         Trello.setKey('83aa6ecc472eb7e1761b6b649cca40fb');
                         Trello.authorize({
                             type: 'redirect',
@@ -159,7 +163,7 @@ function main() {
                             success: addCard,
                             error: authenticationFailure
                         });
-                    });
+                    })
                 });
             }
         } else {
