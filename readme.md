@@ -1,7 +1,20 @@
-I have an authentication and add card example up and running.
+# Directions
+1. Clone or download repository
+2. Go to chrome://extensions in Google Chrome
+3. Click "Developer mode" in upper right-hand corner
+4. Click "Load unpacked extension..."
+5. Find and then select the folder that you downloaded from git
+6. Go to FamilySearch.org and navigate to a person's page
+7. Click the extension's icon in the top right-hand corner
+8. Find the window that pops up and click "Authorize"
+9. The window should go away.  Now, click on the icon in the top right-hand corner again.
+10. The extension should now be working
 
-Run `trelloAuthenticateExample.html` under a live server at port 8000.  Type the following into the address bar of the browser:
+### Existing bugs
+When the status is placed on FamilySearch.org(example: Trello: Available), when you change the card to another list, it displays it on that list too.
 
-`https://localhost:8000/trelloAuthenticateExample.html`
-
-The open in browser option for Brackets will not work.  
+### Items to work on
+- Control Card flow from extension
+- Make nicer icon
+- Fix status issue
+- Test out with Family
