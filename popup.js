@@ -143,6 +143,7 @@ function main() {
                 }, function (window) {
                     console.log('HI!! ' + Trello.token());
                     console.log(window.id);
+                    console.log(window.localStorage)
                     chrome.windows.remove(window.id, function () {
                         Trello.setKey('83aa6ecc472eb7e1761b6b649cca40fb');
                         Trello.authorize({
@@ -153,7 +154,7 @@ function main() {
                                 write: 'true',
                                 account: 'true'
                             },
-                            interactive: 'true',
+                            interactive: 'false',
                             expiration: 'never',
                             success: addCard,
                             error: authenticationFailure
