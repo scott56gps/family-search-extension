@@ -7,7 +7,7 @@ function injectStatus() {
     // Get the right div
     var personInformationElement = document.querySelector('.person-information')
     console.log(personInformationElement)
-    var newH1 = document.createElement('h1')
+    var newDiv = document.createElement('div')
 
     // Decide what message we should display
     switch (idList) {
