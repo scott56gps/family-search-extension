@@ -16,13 +16,13 @@ function main() {
       // Now, let's authenticate the user
       var addCard = function () {
         console.log('Authentication Success!')
+        console.log('Authorized: ' + Trello.authorized());
 
         // Here, we'll need to handle whatever request was given us
 
         // Get all the cards in the board
         function batchSuccess(boardListsAndCards) {
           // We have the Family History Board
-          console.log(Array.isArray(boardListsAndCards))
 
           // FIRST, check to see if the card already exists anywhere in the board
           // The second element of our array contains all the cards on the board
@@ -113,19 +113,59 @@ function main() {
         return;
       }
 
-      Trello.setKey('83aa6ecc472eb7e1761b6b649cca40fb');
-      Trello.authorize({
-        type: 'redirect',
-        name: 'Getting Started Application',
-        scope: {
-          read: 'true',
-          write: 'true'
-        },
-        interactive: 'true',
-        expiration: 'never',
-        success: addCard,
-        error: authenticationFailure
-      });
+      // Check to see if the token still exists
+      console.log(localStorage.trelloToken)
+      if (localStorage.trelloToken) {
+        console.log('hola')
+        // Simply authorize and go ahead
+        Trello.setKey('83aa6ecc472eb7e1761b6b649cca40fb');
+        Trello.authorize({
+          type: 'redirect',
+          name: 'Getting Started Application',
+          scope: {
+            read: 'true',
+            write: 'true',
+            account: 'true'
+          },
+          interactive: 'false',
+          expiration: 'never',
+          success: addCard,
+          error: authenticationFailure
+        });
+      } else {
+        // Manually get the token and then authorize
+        var returnUrl = chrome.extension.getURL("redirect.html");
+        chrome.windows.create({
+          url: "https://trello.com/1/authorize?" + "response_type=token" + "&key=83aa6ecc472eb7e1761b6b649cca40fb" + "&response_type=token" + "&return_url=" + encodeURI(returnUrl) + "&scope=read,write&expiration=never" + "&name=FamilySearchExample",
+          width: 520,
+          height: 620,
+          type: "panel",
+          focused: true
+        }, function (window) {
+
+          window.onRemoved.addListener(function (windowId) {
+            console.log('HI!! ' + Trello.token());
+            console.log(window.id);
+            console.log(localStorage);
+
+
+            Trello.setKey('83aa6ecc472eb7e1761b6b649cca40fb');
+            Trello.authorize({
+              type: 'redirect',
+              name: 'Getting Started Application',
+              scope: {
+                read: 'true',
+                write: 'true',
+                account: 'true'
+              },
+              interactive: 'false',
+              expiration: 'never',
+              success: addCard,
+              error: authenticationFailure
+            });
+          })
+        });
+      }
     } else {
       console.log('result is not an array');
     }

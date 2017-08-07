@@ -216,5 +216,5 @@
   isFunction = function (b) {
     return "function" === typeof b
   };
-  wrapper(window, jQuery, opts);
+  wrapper(window, jQuery, opts); >>>
 })()

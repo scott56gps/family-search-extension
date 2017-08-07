@@ -7,6 +7,7 @@
         body {
             font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
             font-size: 100%;
+            margin: 0;
         }
 
         #status {
@@ -15,6 +16,32 @@
             text-overflow: ellipsis;
             overflow: hidden;
             max-width: 400px;
+        }
+
+        .flex-container {
+            background-color: #E2E4E6;
+            display: flex;
+            width: 700px;
+        }
+
+        .card-container {
+            width: 25%;
+            padding: 0 8px 8px;
+            height: 100px;
+        }
+
+        h2 {
+            margin: 5px 0 5px 8px;
+            font-size: 16px;
+            width: 25%;
+        }
+
+        .card {
+            background-color: white;
+            border-radius: 3px;
+            height: 100%;
+            width: 100%;
+            cursor: pointer;
         }
 
     </style>
@@ -31,11 +58,38 @@
 </head>
 
 <body>
-    <h1 id="boldHeader"> Family Search Example
-    </h1>
+    <!--  The following is unneeded  -->
+    <div style="display:none" id="boldHeader"> Family Search Example
+    </div>
     <div id="name-result">
     </div>
     <div id="id-result">
+    </div>
+    <!--  End unneeded  -->
+    <div class="flex-container header-container">
+        <h2>Available</h2>
+        <h2>Request</h2>
+        <h2>Working</h2>
+        <h2>Finished</h2>
+    </div>
+    <div class="flex-container card-main">
+        <div class="card-container">
+            <div class="card">
+
+            </div>
+        </div>
+
+        <div class="card-container">
+
+        </div>
+
+        <div class="card-container">
+
+        </div>
+
+        <div class="card-container">
+
+        </div>
     </div>
 </body>
 

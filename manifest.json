@@ -17,11 +17,12 @@
         }
     ],
     "background": {
-        "page": "background_page.html"
+        //"page": "background_page.html",
+        "script": ["popup.js"]
     },
     "permissions": [
     "tabs",
     "https://familysearch.org/tree/person/*"
   ],
-    "web_accessible_resources": ["redirect.html", "redirect.js"]
+    "web_accessible_resources": ["redirect.html", "redirect.js", "popup.html"]
 }

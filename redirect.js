@@ -1,19 +1,19 @@
-/*
 window.onload = function () {
     var parts = window.location.href.split("#token=");
     window.localStorage.setItem("trellochrome_token", parts[1]);
 
     console.log(parts[1]);
+
+    close();
 };
-*/
 
 // Authorize Trello
 var authenticationSuccess = function () {
-    console.log('Authentication Success!')
+    console.log('Redirect Authentication Success!')
 
     var token = Trello.token();
     window.localStorage.setItem('trelloToken', token);
-    console.log('token: ' + token);
+    /*console.log('token: ' + token);
 
     var idList = '58f533ae840e741be1d1fb01';
     var creationSuccess = function (data) {
@@ -30,7 +30,7 @@ var authenticationSuccess = function () {
 
     // Now, we post the whole thing to Trello
     Trello.post('/cards/', newCard, creationSuccess);
-    return;
+    return;*/
 }
 
 var authenticationFailure = function () {
