@@ -47,6 +47,7 @@
             height: 100%;
             width: 100%;
             cursor: pointer;
+            display: none;
         }
 
     </style>
@@ -57,7 +58,7 @@
       -
       - [1]: https://developer.chrome.com/extensions/contentSecurityPolicy
      -->
-    <script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.7.1.min.js"></script>
     <script src="https://api.trello.com/1/client.js?key=83aa6ecc472eb7e1761b6b649cca40fb"></script>
     <script src="https://localhost:8000/concept.js"></script>
 </head>
@@ -73,21 +74,21 @@
         <h2>Finished</h2>
     </div>
     <div class="flex-container card-main">
-        <div class="card-container">
-            <div class="card">
+        <div id="available" class="card-container">
+            <div id="card" class="card">
 
             </div>
         </div>
 
-        <div class="card-container">
+        <div id="request" class="card-container">
 
         </div>
 
-        <div class="card-container">
+        <div id="working" class="card-container">
 
         </div>
 
-        <div class="card-container">
+        <div id="finished" class="card-container">
 
         </div>
     </div>
