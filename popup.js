@@ -5,7 +5,7 @@
  * This is a program that will scrape a Family Search
  * Person Page for their name and ID.
  *******************************************************/
-function main() {
+/*function main() {
   // Scrape the page
   chrome.tabs.executeScript(null, {
     file: "scraperCode.js"
@@ -177,4 +177,155 @@ document.addEventListener('DOMContentLoaded', function () {
   console.log('hi');
 })
 
-document.addEventListener('DOMContentLoaded', main);
+document.addEventListener('DOMContentLoaded', main);*/
+
+
+// BEGIN REWRITE
+const availableNamesId = '593eeff5b4e536449b014dca';
+const requestsId = '593ef02548eb8a664b457b01';
+const workingId = '593ef036f31f598432e56856';
+const finishedId = '593ef04b832a24d8cfe13885';
+
+function main() {
+  console.log('Authorized!');
+
+  // Now that we're authorized, get the info that we need to display a card
+  chrome.tabs.executeScript(null, {
+    file: "scraperCode.js"
+  }, function (results) {
+    var name = results[0].fullName + ' ' + results[0].id;
+    console.log(name);
+    getCardInfo(name, function (error, card) {
+      if (card) {
+        // Display the card
+        displayCard(card);
+      }
+    });
+  });
+}
+
+function authenticationFailure() {
+  console.log('Not Authorized!');
+}
+
+function authorizeUser() {
+  // Check to see if the token still exists
+  if (localStorage.trelloToken) {
+    // Simply authorize and go ahead
+    Trello.setKey('83aa6ecc472eb7e1761b6b649cca40fb');
+    Trello.authorize({
+      type: 'redirect',
+      name: 'Getting Started Application',
+      scope: {
+        read: 'true',
+        write: 'true',
+        account: 'true'
+      },
+      interactive: 'false',
+      expiration: 'never',
+      success: main,
+      error: authenticationFailure
+    });
+  } else {
+    // Manually get the token and then authorize
+    var returnUrl = chrome.extension.getURL("redirect.html");
+    chrome.windows.create({
+      url: "https://trello.com/1/authorize?" + "response_type=token" + "&key=83aa6ecc472eb7e1761b6b649cca40fb" + "&response_type=token" + "&return_url=" + encodeURI(returnUrl) + "&scope=read,write&expiration=never" + "&name=FamilySearchExample",
+      width: 520,
+      height: 620,
+      type: "panel",
+      focused: true
+    }, function (window) {
+
+      window.onRemoved.addListener(function (windowId) {
+        Trello.setKey('83aa6ecc472eb7e1761b6b649cca40fb');
+        Trello.authorize({
+          type: 'redirect',
+          name: 'Getting Started Application',
+          scope: {
+            read: 'true',
+            write: 'true',
+            account: 'true'
+          },
+          interactive: 'false',
+          expiration: 'never',
+          success: main,
+          error: authenticationFailure
+        });
+      })
+    });
+  }
+}
+
+function displayCard(card) {
+  console.log(card);
+
+  // Choose where to put the card
+  if (!card) {
+    // Make button 'Share Ancestor With Family'
+  } else {
+    switch (card.idList) {
+      case availableNamesId:
+        $('.card').show();
+        $('#card').html(card.name); // Displays the name
+        $('#available').append($('#card')); // Displays in the proper place
+        break;
+      case requestsId:
+        $('.card').show();
+        $('#card').html(card.name);
+        $('#request').append($('#card'));
+        break;
+      case workingId:
+        $('.card').show();
+        $('#card').html(card.name);
+        $('#working').append($('#card'));
+        break;
+      case finishedId:
+        $('.card').show();
+        $('#card').html(card.name);
+        $('#finished').append($('#card'));
+        break;
+    }
+  }
+}
+
+function getCardInfo(name, callback) {
+  // IF the card exists on the board, get the card info
+  function batchSuccess(batchData) {
+    var cardExists = false;
+    var foundCard;
+    batchData[1]['200'].forEach(function (card) {
+      if (card.name.includes(name)) {
+        // The card exists.
+        cardExists = true;
+        foundCard = card;
+      }
+    });
+
+    if (cardExists) {
+      callback(null, foundCard);
+    } else {
+      callback(null, null);
+    }
+  }
+
+  function batchFailure() {
+
+  }
+
+  Trello.get('/batch?urls=/boards/PsS7R0Dy/lists,/boards/PsS7R0Dy/cards', batchSuccess, batchFailure);
+
+}
+
+function addCard(name) {
+
+}
+
+function moveCard(destListId) {
+
+}
+
+
+window.onload = authorizeUser;
+/*********************************************************************/
+/********************** CONCEPT.JS ***********************************/

@@ -2,95 +2,96 @@
 <html>
 
 <head>
-    <title>Family Search Example Extension Front Page</title>
-    <style>
-        body {
-            font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
-            font-size: 100%;
-            margin: 0;
-        }
+  <title>Family Search Example Extension Front Page</title>
+  <style>
+    body {
+      font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
+      font-size: 100%;
+      margin: 0;
+    }
 
-        #status {
-            /* avoid an excessively wide status text */
-            white-space: pre;
-            text-overflow: ellipsis;
-            overflow: hidden;
-            max-width: 400px;
-        }
+    #status {
+      /* avoid an excessively wide status text */
+      white-space: pre;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      max-width: 400px;
+    }
 
-        .flex-container {
-            background-color: #E2E4E6;
-            display: flex;
-            width: 700px;
-        }
+    .flex-container {
+      background-color: #E2E4E6;
+      display: flex;
+      width: 700px;
+    }
 
-        .welcome-header-container {
-            text-align: center;
-        }
+    .welcome-header-container {
+      text-align: center;
+    }
 
-        .card-container {
-            width: 25%;
-            padding: 0 8px 8px;
-            height: 100px;
-        }
+    .card-container {
+      width: 25%;
+      padding: 0 8px 8px;
+      height: 100px;
+    }
 
-        h2 {
-            text-align: center;
-            margin: 5px 0 5px 8px;
-            font-size: 16px;
-            width: 25%;
-        }
+    h2 {
+      text-align: center;
+      margin: 5px 0 5px 8px;
+      font-size: 16px;
+      width: 25%;
+    }
 
-        .card {
-            background-color: white;
-            border-radius: 3px;
-            height: 100%;
-            width: 100%;
-            cursor: pointer;
-        }
+    .card {
+      background-color: white;
+      border-radius: 3px;
+      height: 100%;
+      width: 100%;
+      cursor: pointer;
+      font: arial;
+    }
 
-    </style>
+  </style>
 
-    <!--
+  <!--
       - JavaScript and HTML must be in separate files: see our Content Security
       - Policy documentation[1] for details and explanation.
       -
       - [1]: https://developer.chrome.com/extensions/contentSecurityPolicy
      -->
-    <script src="jquery-2.1.1.min.js"></script>
-    <script src="trello_client.js"></script>
-    <script src="popup.js"></script>
+  <script src="jquery-2.1.1.min.js"></script>
+  <script src="trello_client.js"></script>
+  <script src="popup.js"></script>
 </head>
 
 <body>
-    <div class="flex-container welcome-header-container">
-        <h2>Sintay Temple Work Extension</h2>
+  <div class="flex-container welcome-header-container">
+    <h2>Sintay Temple Work Extension</h2>
+  </div>
+  <div class="flex-container header-container">
+    <h2>Available</h2>
+    <h2>Request</h2>
+    <h2>Working</h2>
+    <h2>Finished</h2>
+  </div>
+  <div class="flex-container card-main">
+    <div id="available" class="card-container">
+      <div id="card" class="card">
+
+      </div>
     </div>
-    <div class="flex-container header-container">
-        <h2>Available</h2>
-        <h2>Request</h2>
-        <h2>Working</h2>
-        <h2>Finished</h2>
+
+    <div id="request" class="card-container">
+
     </div>
-    <div class="flex-container card-main">
-        <div class="card-container">
-            <div class="card">
 
-            </div>
-        </div>
+    <div id="working" class="card-container">
 
-        <div class="card-container">
-
-        </div>
-
-        <div class="card-container">
-
-        </div>
-
-        <div class="card-container">
-
-        </div>
     </div>
+
+    <div id="finished" class="card-container">
+
+    </div>
+  </div>
 </body>
 
 </html>
