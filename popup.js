@@ -189,6 +189,8 @@ const finishedId = '593ef04b832a24d8cfe13885';
 function main() {
   console.log('Authorized!');
 
+  handleDrag();
+
   // Now that we're authorized, get the info that we need to display a card
   chrome.tabs.executeScript(null, {
     file: "scraperCode.js"
@@ -314,7 +316,41 @@ function getCardInfo(name, callback) {
   }
 
   Trello.get('/batch?urls=/boards/PsS7R0Dy/lists,/boards/PsS7R0Dy/cards', batchSuccess, batchFailure);
+}
 
+function handleDrag() {
+  document.getElementById('card').addEventListener('dragstart', function (event) {
+    event.dataTransfer.setData('text', event.target.id);
+  });
+
+  document.querySelectorAll('.card-container').forEach(function (node) {
+    node.addEventListener('dragover', function (event) {
+      event.preventDefault();
+    });
+  });
+
+  document.querySelectorAll('.card-container').forEach(function (node) {
+    node.addEventListener('drop', function (event) {
+      event.preventDefault();
+      var data = event.dataTransfer.getData('text');
+      event.target.appendChild(document.getElementById(data));
+    });
+  });
+}
+
+function drag(event) {
+  event.dataTransfer.setData('text', event.target.id);
+}
+
+function allowDrop(event) {
+  event.preventDefault();
+}
+
+function drop(event) {
+  event.preventDefault();
+  var data = event.dataTransfer.getData('text');
+  event.target.appendChild(document.getElementById(name));
+  console.log('droppedData: ' + data);
 }
 
 function addCard(name) {
