@@ -200,7 +200,7 @@ function main() {
       if (card) {
         // Display the card
         displayCard(card);
-        handleDrag();
+        handleDrag(card);
       }
     });
   });
@@ -217,7 +217,7 @@ function authorizeUser() {
     Trello.setKey('83aa6ecc472eb7e1761b6b649cca40fb');
     Trello.authorize({
       type: 'redirect',
-      name: 'Getting Started Application',
+      name: 'Family Search Collaborator',
       scope: {
         read: 'true',
         write: 'true',
@@ -243,7 +243,7 @@ function authorizeUser() {
         Trello.setKey('83aa6ecc472eb7e1761b6b649cca40fb');
         Trello.authorize({
           type: 'redirect',
-          name: 'Getting Started Application',
+          name: 'Family Search Collaborator',
           scope: {
             read: 'true',
             write: 'true',
@@ -318,7 +318,7 @@ function getCardInfo(name, callback) {
   Trello.get('/batch?urls=/boards/PsS7R0Dy/lists,/boards/PsS7R0Dy/cards', batchSuccess, batchFailure);
 }
 
-function handleDrag() {
+function handleDrag(card) {
   document.getElementById('card').addEventListener('dragstart', function (event) {
     console.log(event.target.innerHTML);
     event.dataTransfer.setData('text', event.target.innerHTML);
@@ -338,23 +338,24 @@ function handleDrag() {
 
       // Get the element that we're in
       var destinationListId;
+      console.log(event.path[0].id)
       switch (event.path[0].id) {
-        case availableNamesId:
+        case 'available':
           destinationListId = availableNamesId;
           break;
-        case requestsId:
+        case 'request':
           destinationListId = requestsId;
           break;
-        case workingId:
+        case 'working':
           destinationListId = workingId;
           break;
-        case finishedId:
+        case 'finished':
           destinationListId = finishedId;
           break;
       }
 
       // Call moveCard
-      moveCard(data, destinationListId);
+      moveCard(card, destinationListId);
     });
   });
 }
@@ -379,7 +380,13 @@ function addCard(name) {
 }
 
 function moveCard(cardToMove, destListId) {
-
+  Trello.rest('PUT', `/cards/${cardToMove.id}`, {
+    idList: destListId
+  }, function () {
+    console.log('Card was moved to ListID: ' + destListId);
+  }, function () {
+    console.log('There was an error in moving the card');
+  });
 }
 
 
