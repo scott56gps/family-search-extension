@@ -189,7 +189,6 @@ const finishedId = '593ef04b832a24d8cfe13885';
 function main() {
   console.log('Authorized!');
 
-  handleDrag();
 
   // Now that we're authorized, get the info that we need to display a card
   chrome.tabs.executeScript(null, {
@@ -201,6 +200,7 @@ function main() {
       if (card) {
         // Display the card
         displayCard(card);
+        handleDrag();
       }
     });
   });
@@ -320,7 +320,8 @@ function getCardInfo(name, callback) {
 
 function handleDrag() {
   document.getElementById('card').addEventListener('dragstart', function (event) {
-    event.dataTransfer.setData('text', event.target.id);
+    console.log(event.target.innerHTML);
+    event.dataTransfer.setData('text', event.target.innerHTML);
   });
 
   document.querySelectorAll('.card-container').forEach(function (node) {
@@ -333,7 +334,27 @@ function handleDrag() {
     node.addEventListener('drop', function (event) {
       event.preventDefault();
       var data = event.dataTransfer.getData('text');
-      event.target.appendChild(document.getElementById(data));
+      event.target.appendChild(document.getElementById('card'));
+
+      // Get the element that we're in
+      var destinationListId;
+      switch (event.path[0].id) {
+        case availableNamesId:
+          destinationListId = availableNamesId;
+          break;
+        case requestsId:
+          destinationListId = requestsId;
+          break;
+        case workingId:
+          destinationListId = workingId;
+          break;
+        case finishedId:
+          destinationListId = finishedId;
+          break;
+      }
+
+      // Call moveCard
+      moveCard(data, destinationListId);
     });
   });
 }
@@ -357,7 +378,7 @@ function addCard(name) {
 
 }
 
-function moveCard(destListId) {
+function moveCard(cardToMove, destListId) {
 
 }
 
