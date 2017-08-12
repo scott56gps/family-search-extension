@@ -1,28 +1,28 @@
 {
-  "manifest_version": 2,
+    "manifest_version": 2,
 
-  "name": "Family Search Example",
-  "description": "This extension scrapes a FamilySearch Person page for their name and pid",
-  "version": "1.0",
+    "name": "Family Search Collaborator",
+    "description": "This extension makes it easier for families to share their Temple Work with each other.",
+    "version": "1.0",
 
-  "browser_action": {
-    "default_icon": "icon.png",
-    "default_popup": "popup.html"
-  },
-  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
-  "content_scripts": [
-    {
-      "matches": ["https://familysearch.org/tree/person/*"],
-      "js": ["popup.js"]
+    "browser_action": {
+        "default_icon": "fan-chart.png",
+        "default_popup": "popup.html"
+    },
+    "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
+    "content_scripts": [
+        {
+            "matches": ["https://familysearch.org/tree/person/*"],
+            "js": ["popup.js"]
         }
     ],
-  "background": {
-    //"page": "background_page.html",
-    "script": ["popup.js"]
-  },
-  "permissions": [
+    "background": {
+        //"page": "background_page.html",
+        "script": ["popup.js"]
+    },
+    "permissions": [
     "tabs",
     "https://familysearch.org/tree/person/*"
   ],
-  "web_accessible_resources": ["redirect.html", "redirect.js", "popup.html"]
+    "web_accessible_resources": ["redirect.html", "redirect.js", "popup.html"]
 }
