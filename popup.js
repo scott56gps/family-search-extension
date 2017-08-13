@@ -408,12 +408,31 @@ function addCard(name) {
 }
 
 function moveCard(cardToMove, destListId) {
-  Trello.rest('PUT', `/cards/${cardToMove.id}`, {
-    idList: destListId
-  }, function () {
-    console.log('Card was moved to ListID: ' + destListId);
-  }, function () {
-    console.log('There was an error in moving the card');
+  // First, check to see if the current user is subscribed to the card
+  Trello.get('/members/me', {}, function (currentMember) {
+    var memberId = currentMember.id;
+
+    if (cardToMove.idMembers.includes(memberId)) {
+      Trello.rest('PUT', `/cards/${cardToMove.id}`, {
+        idList: destListId
+      }, function () {
+        console.log('Card was moved to ListID: ' + destListId);
+      }, function () {
+        console.log('There was an error in moving the card');
+      });
+    } else {
+      Trello.rest('PUT', `/cards/${cardToMove.id}`, {
+        idList: destListId,
+        idMembers: memberId.toString()
+      }, function () {
+        console.log('Card was moved to ListID: ' + destListId);
+        // Currently does not work
+        //document.getElementById('outputContainer').innerHTML = 'Card was moved successfully';
+      }, function () {
+        console.log('There was an error in moving the card');
+        //document.getElementById('outputContainer').innerHTML = 'There was a problem in moving the card';
+      });
+    }
   });
 }
 
