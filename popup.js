@@ -367,6 +367,8 @@ function handleDrag(card) {
           break;
       }
 
+      console.log('destinationListId: ' + destinationListId);
+
       // Call moveCard
       moveCard(card, destinationListId);
     });
@@ -397,10 +399,11 @@ function addCard(name) {
     Trello.rest('POST', '/cards', {
       name: name,
       idList: availableNamesId,
-      idMembers: memberId.toString()
+      idMembers: `${memberId}`
     }, function (newCard) {
       $('.addAncestor').replaceWith('Ancestor Shared Successfully');
       displayCard(newCard);
+      handleDrag(newCard);
     }, function (error) {
       console.log(error);
     });
@@ -417,19 +420,19 @@ function moveCard(cardToMove, destListId) {
         idList: destListId
       }, function () {
         console.log('Card was moved to ListID: ' + destListId);
-      }, function () {
-        console.log('There was an error in moving the card');
+      }, function (error) {
+        console.log('There was an error in moving the card: ' + error);
       });
     } else {
       Trello.rest('PUT', `/cards/${cardToMove.id}`, {
         idList: destListId,
-        idMembers: memberId.toString()
+        idMembers: [`${cardToMove.idMembers}`, `${memberId}`]
       }, function () {
         console.log('Card was moved to ListID: ' + destListId);
         // Currently does not work
         //document.getElementById('outputContainer').innerHTML = 'Card was moved successfully';
-      }, function () {
-        console.log('There was an error in moving the card');
+      }, function (error) {
+        console.log('There was an error in moving the card: ' + error);
         //document.getElementById('outputContainer').innerHTML = 'There was a problem in moving the card';
       });
     }
