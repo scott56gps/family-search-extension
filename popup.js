@@ -186,6 +186,9 @@ const requestsId = '593ef02548eb8a664b457b01';
 const workingId = '593ef036f31f598432e56856';
 const finishedId = '593ef04b832a24d8cfe13885';
 
+// Query selectors
+var outputDiv = document.getElementById('outputContainer');
+
 function main() {
   console.log('Authorized!');
 
@@ -199,8 +202,21 @@ function main() {
     getCardInfo(name, function (error, card) {
       if (card) {
         // Display the card
+        console.log('found card');
         displayCard(card);
         handleDrag(card);
+      } else {
+        // The card does not exist anywhere on the board
+        console.log('no card');
+        var newInputElement = document.createElement('input');
+        newInputElement.setAttribute('class', 'addAncestor');
+        newInputElement.setAttribute('type', 'button');
+        newInputElement.setAttribute('value', 'Share Ancestor');
+        document.getElementById('outputContainer').appendChild(newInputElement);
+
+        $('.addAncestor').on('click', function () {
+          addCard(name);
+        });
       }
     });
   });
@@ -263,32 +279,29 @@ function displayCard(card) {
   console.log(card);
 
   // Choose where to put the card
-  if (!card) {
-    // Make button 'Share Ancestor With Family'
-  } else {
-    switch (card.idList) {
-      case availableNamesId:
-        $('.card').show();
-        $('#card').html(card.name); // Displays the name
-        $('#available').append($('#card')); // Displays in the proper place
-        break;
-      case requestsId:
-        $('.card').show();
-        $('#card').html(card.name);
-        $('#request').append($('#card'));
-        break;
-      case workingId:
-        $('.card').show();
-        $('#card').html(card.name);
-        $('#working').append($('#card'));
-        break;
-      case finishedId:
-        $('.card').show();
-        $('#card').html(card.name);
-        $('#finished').append($('#card'));
-        break;
-    }
+  switch (card.idList) {
+    case availableNamesId:
+      $('.card').show();
+      $('#card').html(card.name); // Displays the name
+      $('#available').append($('#card')); // Displays in the proper place
+      break;
+    case requestsId:
+      $('.card').show();
+      $('#card').html(card.name);
+      $('#request').append($('#card'));
+      break;
+    case workingId:
+      $('.card').show();
+      $('#card').html(card.name);
+      $('#working').append($('#card'));
+      break;
+    case finishedId:
+      $('.card').show();
+      $('#card').html(card.name);
+      $('#finished').append($('#card'));
+      break;
   }
+
 }
 
 function getCardInfo(name, callback) {
@@ -376,7 +389,22 @@ function drop(event) {
 }
 
 function addCard(name) {
-
+  // Get the current member ID
+  var memberId;
+  Trello.get('/members/me', {}, function (currentMember) {
+    memberId = currentMember.id;
+    console.log(memberId);
+    Trello.rest('POST', '/cards', {
+      name: name,
+      idList: availableNamesId,
+      idMembers: memberId.toString()
+    }, function (newCard) {
+      $('.addAncestor').replaceWith('Ancestor Shared Successfully');
+      displayCard(newCard);
+    }, function (error) {
+      console.log(error);
+    });
+  });
 }
 
 function moveCard(cardToMove, destListId) {
