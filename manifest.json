@@ -1,12 +1,11 @@
 {
     "manifest_version": 2,
-
-    "name": "Family History Collaborator",
-    "description": "This extension helps a family member share temple work with their family",
+    "name": "Family Search Collaborator",
+    "description": "This extension makes it easier for families to share their Temple Work with each other.",
     "version": "1.0",
 
     "browser_action": {
-        "default_icon": "fan-chart-icon.png",
+        "default_icon": "fan-chart.png",
         "default_popup": "popup.html"
     },
     "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
@@ -26,17 +25,3 @@
   ],
     "web_accessible_resources": ["redirect.html", "redirect.js", "popup.html"]
 }
-$.ajax({
-    url: "https://tdsb.byui.edu/TDWebApi/api/auth",
-    contentType: "application/json; charset=utf-8",
-    data: {
-        username: "cmoore4",
-        password: "Chevere1016"
-    }
-    success: function (data) {
-        console.log(data)
-    },
-    error: function (e) {
-        console.log('e', e)
-    }
-})
