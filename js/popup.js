@@ -12,7 +12,7 @@ function main() {
 
   // Now that we're authorized, get the info that we need to display a card
   chrome.tabs.executeScript(null, {
-    file: "scraperCode.js"
+    file: "js/scraperCode.js"
   }, function (results) {
     var name = results[0].fullName + ' ' + results[0].id;
     console.log(name);
@@ -208,6 +208,9 @@ function addCard(name, id) {
       desc: `FamilySearch Ordinance Page: https://familysearch.org/tree/person/${id}/ordinances`
     }, function (newCard) {
       $('.addAncestor').replaceWith('Ancestor Shared Successfully');
+      setTimeout(function () {
+        $('#outputContainer').empty();
+      }, 5000);
       displayCard(newCard);
       handleDrag(newCard);
     }, function (error) {
@@ -229,10 +232,35 @@ function moveCard(cardToMove, destListId) {
       idMembers: currentMembers
     }, function () {
       console.log('Card was moved to ListID: ' + destListId);
+
+      // Remove the current status text if it is there
+      $('#outputContainer').empty();
+      $('#outputContainer').append(`Card was moved to ${getListName(destListId)}`);
+      setTimeout(function () {
+        $('#outputContainer').empty();
+      }, 5000);
     }, function (error) {
       console.log('There was an error in moving the card: ' + error);
     });
   });
+}
+
+function getListName(listId) {
+  // Based on the listId, return the name
+  switch (listId) {
+    case availableNamesId:
+      return 'Available';
+      break;
+    case requestsId:
+      return 'Requested';
+      break;
+    case workingId:
+      return 'Working';
+      break;
+    case finishedId:
+      return 'Finished';
+      break;
+  }
 }
 
 
