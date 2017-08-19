@@ -68,9 +68,15 @@ function authorizeUser() {
       url: "https://trello.com/1/authorize?" + "response_type=token" + "&key=83aa6ecc472eb7e1761b6b649cca40fb" + "&response_type=token" + "&return_url=" + encodeURI(returnUrl) + "&scope=read,write&expiration=never" + "&name=FamilySearchExample",
       width: 520,
       height: 620,
-      type: "panel",
+      type: "popup",
       focused: true
     }, function (window) {
+      // Make sure the window is focused
+      chrome.windows.update(window.id, {
+        "focused": true
+      });
+
+      // When the window is removed, call main
       chrome.windows.onRemoved.addListener(function (windowId) {
         // Now that we're authorized, set the token and let's call main!
         Trello.setKey('83aa6ecc472eb7e1761b6b649cca40fb');
