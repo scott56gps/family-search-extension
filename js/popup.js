@@ -14,6 +14,7 @@ function main() {
   chrome.tabs.executeScript(null, {
     file: "js/scraperCode.js"
   }, function (results) {
+    console.log(results);
     var name = results[0].fullName + ' ' + results[0].id;
     console.log(name);
     getCardInfo(name, function (error, card) {

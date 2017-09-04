@@ -1,23 +1,16 @@
 function scrapeNameAndId() {
-    // Get the name and Id
-    var fullName = document.querySelector('span.fs-person-vitals__name-full').innerText.trim();
-    var id = document.querySelector('span.fs-person-details__id').innerText.trim();
+  // Get the name and Id
+  var fullName = document.querySelector('.fs-person-vitals__name-full').innerHTML.trim();
+  var id = document.querySelector('.fs-person-details__id').innerHTML.trim();
 
-    console.log('fullName: ' + fullName);
-    console.log('ID: ' + id);
+  console.log('fullName: ' + fullName);
+  console.log('ID: ' + id);
 
-    return {
-        fullName: fullName,
-        id: id
-    };
+  return {
+    fullName: fullName,
+    id: id
+  };
 }
-
-// START EXPERIMENT
-function putTrelloObjectOnPage() {
-    var newScriptElement = document.createElement('script');
-    newScriptElement.setAttribute('src', 'https://api.trello.com/1/client.js?key=83aa6ecc472eb7e1761b6b649cca40fb')
-}
-// END EXPERIMENT
 
 scrapeNameAndId();
 

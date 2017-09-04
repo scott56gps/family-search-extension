@@ -17,13 +17,14 @@
   "content_scripts": [
     {
       "matches": ["https://familysearch.org/tree/person/*"],
-      "js": ["js/popup.js"]
+      "js": ["js/popup.js", "js/scraperCode.js"]
         }
     ],
   "background": {
     "script": ["js/popup.js"]
   },
   "permissions": [
+    "activeTab",
     "tabs",
     "https://familysearch.org/tree/person/*"
   ],
