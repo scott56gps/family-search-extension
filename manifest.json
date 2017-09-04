@@ -3,7 +3,7 @@
   "name": "Family Search Collaborator",
   "description": "This extension makes it easier for families to share their Temple Work with each other.",
   "short_name": "Chrome Extension",
-  "version": "0.2",
+  "version": "0.2.1",
   "icons": {
     "16": "fan-chart.png",
     "48": "fan-chart.png"
