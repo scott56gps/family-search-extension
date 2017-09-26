@@ -11,16 +11,25 @@ const finishedId = '593ef04b832a24d8cfe13885';
 function main() {
     console.log('Authorized!');
 
-
     // Now that we're authorized, get the info that we need to display the names
-    getCardInfo(console.log);
+    fetchNames(function (fetchError) {
+        if (fetchError) {
+            console.log(fetchError);
+            return;
+        }
+
+        //        // Attach button event listener
+        //        $('.addToRequestsButton').on('click', function () {
+        //            console.log(this.data);
+        //        });
+    });
 }
 
 function authorizeUser() {
     // If the user is not already logged in, authenticate the user
     Trello.authorize({
         type: 'redirect',
-        name: 'Family History Concept App',
+        name: 'Family History Available List Concept App',
         scope: {
             read: 'true',
             write: 'true'
@@ -33,32 +42,39 @@ function authorizeUser() {
 
 function authenticationFailure() {
     console.log('Not Authorized!');
+    return;
 }
 
-function getCardInfo(callback) {
+function fetchNames(callback) {
     // IF the card exists on the board, get the card info
     function batchSuccess(batchData) {
         console.log(batchData);
         batchData[1]['200'].forEach(function (card) {
             if (card.idList == availableNamesId || card.idList == workingId) {
                 console.log(card.name + ' List:' + convertListIdToName(card));
-                $('.outputContainer').append(`<div class="flex-container name-result">` + card.name + ' List:' + convertListIdToName(card) + '</div>');
+                $('.outputContainer').append('<div class="flex-container name-result">' +
+                    card.name + ' List:' +
+                    convertListIdToName(card) +
+                    ` <input id="${card.id}Button" class="addToRequestsButton" type="button" value="Add To Requests" /></div>`);
+                // Attach an event listener to this element
+                $(`#${card.id}Button`).on('click', {
+                    id: card.id
+                }, function (event) {
+                    console.log(event.data);
+                });
             }
         });
 
-        callback('Got through function');
+        callback();
         return;
     }
 
     function batchFailure() {
-        console.log('There was a Trello batch request error');
-        callback('There were errors');
+        callback('There was an error in fetching the names');
         return;
     }
 
-    console.log('about to make Trello request');
     Trello.get('/batch?urls=/boards/PsS7R0Dy/lists,/boards/PsS7R0Dy/cards', batchSuccess, batchFailure);
-
 }
 
 function convertListIdToName(card) {
